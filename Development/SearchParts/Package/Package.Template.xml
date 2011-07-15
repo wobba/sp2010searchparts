@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Solution xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CodeAccessSecurity>
+    <PolicyItem>
+      <PermissionSet class="NamedPermissionSet" version="1">
+        <IPermission class="AspNetHostingPermission" version="1" Level="Minimal" />
+        <IPermission class="SecurityPermission" version="1" Flags="Execution,ControlPrincipal,ControlAppDomain,ControlDomainPolicy,ControlEvidence,ControlThread" />
+        <IPermission class="Microsoft.SharePoint.Security.SharePointPermission, Microsoft.SharePoint.Security, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" version="1" ObjectModel="True" Impersonate="true"  />
+        <IPermission class="System.Security.Permissions.EnvironmentPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1"  Unrestricted="true" />
+        <IPermission class="System.Net.WebPermission, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"
+version="1">
+          <ConnectAccess>
+            <URI uri=".*"/>
+          </ConnectAccess>
+        </IPermission>
+        <IPermission class="System.Security.Permissions.ReflectionPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" />
+        <IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true" PathDiscovery="*AllFiles*" />        
+      </PermissionSet>
+      <Assemblies>
+        <Assembly Name="$SharePoint.Project.AssemblyName$" Version="$SharePoint.Project.AssemblyVersion$" PublicKeyBlob="$SharePoint.Project.AssemblyPublicKeyBlob$"/>
+      </Assemblies>
+    </PolicyItem>    
+  </CodeAccessSecurity>
+</Solution>

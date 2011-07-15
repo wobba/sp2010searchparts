@@ -2,7 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using System.Linq;
-using KQLParser;
+using mAdcOW.SharePoint.KqlParser;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KQLParserTest
@@ -58,14 +58,14 @@ namespace KQLParserTest
         public void Synonym1()
         {
             string query = @"-pepsi solo";
-            string result = _helper.GetFqlFromKql(query, Synonym.Include, 100);
+            string result = _helper.GetFqlFromKql(query, SynonymHandling.Include, 100);
         }
 
         [TestMethod]
         public void Synonym2()
         {
             string query = @"test NONE(pepsi)";
-            string result = _helper.GetFqlFromKql(query, Synonym.Include, 100);
+            string result = _helper.GetFqlFromKql(query, SynonymHandling.Include, 100);
         }
         
         [TestMethod]
@@ -79,6 +79,13 @@ namespace KQLParserTest
         public void MultiTest1()
         {
             string query = "(\"SharePoint Search\" OR \"Live Search\") AND title:\"Keyword Syntax\" NOT (sug OR svelg)";
+            string result = _helper.GetFqlFromKql(query);
+        }
+
+        [TestMethod]
+        public void Simple1()
+        {
+            string query = "test test2";
             string result = _helper.GetFqlFromKql(query);
         }
         //("SharePoint Search" OR "Live Search") AND title:"Keyword Syntax" NOT (sug OR svelg)

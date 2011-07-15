@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/" >
+  <Module Name="Core Results FQL" List="113" Url="_catalogs/wp">
+    <File Path="CoreResultsFQLWebPart\FQLCoreResults.webpart" Url="FQLCoreResults.webpart" Type="GhostableInLibrary">
+      <Property Name="Group" Value="Search" />
+    </File>
+  </Module>
+</Elements>
