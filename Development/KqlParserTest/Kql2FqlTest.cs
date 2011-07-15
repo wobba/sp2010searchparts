@@ -10,7 +10,19 @@ namespace KQLParserTest
     [TestClass]
     public class Kql2FqlTest
     {
-        FqlHelper _helper = new FqlHelper();
+        private FqlHelper _helper;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            var synonymLookup = new Dictionary<string, List<string>>();
+            synonymLookup["contoso"] = new List<string> { "microsoft" };
+            synonymLookup["microsoft"] = new List<string> { "contoso" };
+            synonymLookup["pepsi"] = new List<string> { "cola" };
+            synonymLookup["coca cola"] = new List<string> { "pepsi max" };
+            _helper = new FqlHelper(synonymLookup);
+
+        }
 
         [TestMethod]
         public void PropertyWord()
