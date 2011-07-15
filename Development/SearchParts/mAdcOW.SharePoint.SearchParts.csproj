@@ -42,7 +42,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Office.Server.Search, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=AMD64">
@@ -80,7 +80,6 @@
     <None Include="Features\FQLEnabledFeature\FQLEnabledFeature.feature">
       <FeatureId>{d5d0ea93-293d-4dd6-862e-11b69fd4e6bf}</FeatureId>
     </None>
-    <None Include="key.snk" />
     <None Include="CoreResultsFQLWebPart\FqlCoreResults.webpart" />
     <None Include="CoreResultsFQLWebPart\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{98ed4e8b-e922-427d-b21a-d4724ce9af12}</SharePointProjectItemId>
