@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Web;
 using System.Web.UI.WebControls.WebParts;
 using mAdcOW.SharePoint.KqlParser;
@@ -44,7 +45,10 @@ namespace mAdcOW.SharePoint.Search
             {
                 return null;
             }
-            FqlHelper helper = new FqlHelper();
+
+            Dictionary<string, List<string>> synonymLookup = new Dictionary<string, List<string>>();
+            FastSynonymReader.PopulateSynonyms(synonymLookup);
+            FqlHelper helper = new FqlHelper(synonymLookup);
             var fql = helper.GetFqlFromKql(query, SynonymHandling, BoostValue);
             return fql;
         }
