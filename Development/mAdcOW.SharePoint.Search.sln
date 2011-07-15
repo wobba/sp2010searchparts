@@ -14,16 +14,16 @@ Global
 		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs03
-		SccProjectUniqueName0 = KqlParser\\mAdcOW.SharePoint.KqlParser.csproj
-		SccProjectName0 = KqlParser
-		SccLocalPath0 = KqlParser
-		SccLocalPath1 = .
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = KqlParser\\mAdcOW.SharePoint.KqlParser.csproj
+		SccProjectName1 = KqlParser
+		SccLocalPath1 = KqlParser
 		SccProjectUniqueName2 = SearchParts\\mAdcOW.SharePoint.SearchParts.csproj
 		SccProjectName2 = SearchParts
 		SccLocalPath2 = SearchParts
 		SccProjectUniqueName3 = KqlParserTest\\KQLParserTest.csproj
 		SccProjectTopLevelParentUniqueName3 = mAdcOW.SharePoint.Search.sln
-		SccProjectName3 = KqlParserTest/KqlParserTest
+		SccProjectName3 = KqlParserTest
 		SccLocalPath3 = KqlParserTest
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +32,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{2E966EDA-E25E-490F-A9F1-251CEE96A2F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E966EDA-E25E-490F-A9F1-251CEE96A2F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E966EDA-E25E-490F-A9F1-251CEE96A2F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E966EDA-E25E-490F-A9F1-251CEE96A2F3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{245CBFF8-1BCD-4471-9868-AD6A162461D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
