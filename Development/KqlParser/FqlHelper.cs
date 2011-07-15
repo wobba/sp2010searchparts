@@ -6,19 +6,16 @@ namespace mAdcOW.SharePoint.KqlParser
 {
     public class FqlHelper
     {
-        private readonly Dictionary<string, List<string>> _synonymLookup = new Dictionary<string, List<string>>();
+        private readonly Dictionary<string, List<string>> _synonymLookup;
         private bool _synonymAdded;
         private SynonymHandling _synonymHandling;
 
-        public FqlHelper()
+        public FqlHelper(Dictionary<string, List<string>> synonymLookup)
         {
-            _synonymLookup["contoso"] = new List<string> { "microsoft" };
-            _synonymLookup["microsoft"] = new List<string> { "contoso" };
-            _synonymLookup["pepsi"] = new List<string> { "cola" };
-            _synonymLookup["coca cola"] = new List<string> { "pepsi max" };
+            _synonymLookup = synonymLookup;
         }
 
-        public string GetFqlFromKql( string kql )
+        public string GetFqlFromKql(string kql)
         {
             const TokenType allowedTokenTypes = TokenType.Group | TokenType.Phrase | TokenType.Property | TokenType.Word | TokenType.Operator;
             TokenBuilder builder = new TokenBuilder(kql, allowedTokenTypes);
@@ -29,7 +26,7 @@ namespace mAdcOW.SharePoint.KqlParser
             return Build(includes, excludes);
         }
 
-        public string GetFqlFromKql( string kql, SynonymHandling synonymHandling, int boostValue )
+        public string GetFqlFromKql(string kql, SynonymHandling synonymHandling, int boostValue)
         {
             _synonymHandling = synonymHandling;
             const TokenType allowedTokenTypes = TokenType.Group | TokenType.Phrase | TokenType.Property | TokenType.Word | TokenType.Operator;
@@ -39,18 +36,18 @@ namespace mAdcOW.SharePoint.KqlParser
             List<string> excludes = new List<string>();
             CreateTokenFql(builder, includes, excludes, synonymHandling);
             string resultFql = Build(includes, excludes);
-            if(_synonymAdded && boostValue > 0)
+            if (_synonymAdded && boostValue > 0)
             {
                 StringBuilder sb = new StringBuilder();
                 sb.Append("xrank(");
                 sb.Append(resultFql);
                 sb.Append(",");
-                if(includes.Count > 1 ) sb.Append("and(");
+                if (includes.Count > 1) sb.Append("and(");
                 includes.Clear();
                 excludes.Clear();
                 CreateTokenFql(builder, includes, excludes, SynonymHandling.None);
-                sb.Append(Build(includes, new List<string>()).Replace("annotation_class=\"user\",", "") );
-                if(includes.Count > 1 ) sb.Append(")");
+                sb.Append(Build(includes, new List<string>()).Replace("annotation_class=\"user\",", ""));
+                if (includes.Count > 1) sb.Append(")");
                 sb.AppendFormat(",boost={0})", boostValue); // close xrank
                 return sb.ToString();
             }
@@ -60,11 +57,11 @@ namespace mAdcOW.SharePoint.KqlParser
         private string JoinTokens(List<Token> tokens, string operand)
         {
             if (tokens.Count == 0) return string.Empty;
-            if (tokens.Count == 1) return tokens[0].GetFql(_synonymHandling);
+            if (tokens.Count == 1) return tokens[0].GetFql(_synonymHandling, _synonymLookup);
             var innerQueries = new List<string>();
             foreach (Token token in tokens)
             {
-                innerQueries.Add(token.GetFql(_synonymHandling));
+                innerQueries.Add(token.GetFql(_synonymHandling, _synonymLookup));
             }
             var innerSb = new StringBuilder();
             innerSb.Append(operand);
@@ -80,7 +77,7 @@ namespace mAdcOW.SharePoint.KqlParser
             string term = token.Text;
             if (token.Type == TokenType.Phrase && term.Contains(' '))
             {
-                token.Text = token.Text.Trim(new[] {'"'});
+                token.Text = token.Text.Trim(new[] { '"' });
                 if (isUserClass)
                     return string.Format("string({0}, annotation_class=\"user\", mode=\"phrase\")", term);
                 return string.Format("string({0}, mode=\"phrase\")", term);
@@ -136,7 +133,7 @@ namespace mAdcOW.SharePoint.KqlParser
                 includes.Add(ors);
             foreach (Token token in builder.AndExpr)
             {
-                string fql = token.GetFql(synonymHandling);
+                string fql = token.GetFql(synonymHandling, _synonymLookup);
                 if (synonymHandling == SynonymHandling.Include && (token.Type == TokenType.Phrase || token.Type == TokenType.Word))
                 {
                     fql = GetSynonymsFql(token.Text, fql);
@@ -145,7 +142,7 @@ namespace mAdcOW.SharePoint.KqlParser
             }
             foreach (Token token in builder.NotExpr)
             {
-                excludes.Add(token.GetFql(SynonymHandling.None));
+                excludes.Add(token.GetFql(SynonymHandling.None, null));
             }
         }
 

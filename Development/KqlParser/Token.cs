@@ -8,7 +8,7 @@ namespace mAdcOW.SharePoint.KqlParser
         public TokenType Type { get; set; }
         public string ParentOperator { get; set; }
 
-        public string GetFql(SynonymHandling synonymHandling)
+        public string GetFql(SynonymHandling synonymHandling, Dictionary<string, List<string>> synonymLookup)
         {
             if (Type == TokenType.Phrase || Type == TokenType.Word || Type == TokenType.Property)
             {
@@ -33,7 +33,7 @@ namespace mAdcOW.SharePoint.KqlParser
 
                 List<string> includes = new List<string>();
                 List<string> excludes = new List<string>();
-                FqlHelper helper = new FqlHelper();
+                FqlHelper helper = new FqlHelper(synonymLookup);
                 helper.CreateTokenFql(builder, includes, excludes, synonymHandling);
                 return helper.Build(includes, excludes);
             }
