@@ -85,7 +85,7 @@ namespace mAdcOW.SharePoint.KqlParser
                     {
                         Token t = new Token
                                       {
-                                          Text = NormalToken(_query.Substring(_pos), out skipChars)
+                                          Text = NormalToken(_query.Substring(_pos), out skipChars).Trim()
                                       };                        
                         t.Type = t.Text.EndsWith(":") || t.Text.EndsWith("=") ? TokenType.Property : TokenType.Word;
                         yield return t;

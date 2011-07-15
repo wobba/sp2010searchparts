@@ -9,7 +9,7 @@ namespace mAdcOW.SharePoint.KqlParser
         private readonly List<Token> _orExpr = new List<Token>();
         private readonly List<Token> _notExpr = new List<Token>();
         private readonly string _query;
-        private TokenType _allowed; 
+        private TokenType _allowed;
         public TokenBuilder(string query, TokenType allowedTypes)
         {
             _query = query;
@@ -36,10 +36,10 @@ namespace mAdcOW.SharePoint.KqlParser
             TokeParser tp = new TokeParser(_query);
             IEnumerator<Token> enumerator = tp.GetEnumerator();
             Stack<Token> tokens = new Stack<Token>();
-            Stack<TokenType> allowedStack = new Stack<TokenType>(); 
+            Stack<TokenType> allowedStack = new Stack<TokenType>();
             while (enumerator.MoveNext())
             {
-                if(allowedStack.Count > 0)
+                if (allowedStack.Count > 0)
                     _allowed = allowedStack.Pop();
                 Token token = enumerator.Current;
                 TokenType type = token.Type;
@@ -53,13 +53,15 @@ namespace mAdcOW.SharePoint.KqlParser
                             var op = token.Text;
                             if (op == "OR")
                             {
-                                if(tokens.Count > 0)
+                                if (tokens.Count > 0)
                                     _orExpr.Add(tokens.Pop());
                             }
                             else if (op == "AND")
                             {
                                 if (tokens.Count > 0)
+                                {
                                     _andExpr.Add(tokens.Pop());
+                                }
                             }
                             allowedStack.Push(_allowed);
                             _allowed ^= TokenType.Operator;
@@ -69,6 +71,7 @@ namespace mAdcOW.SharePoint.KqlParser
                             var property = token;
                             enumerator.MoveNext();
                             token = enumerator.Current;
+                            if (token == null) break;
                             if (token.Type != TokenType.Phrase && token.Type != TokenType.Word) continue;
                             property.Text += token.Text;
                             token = property;
@@ -79,17 +82,18 @@ namespace mAdcOW.SharePoint.KqlParser
                     }
 
                     bool addToStack = true;
-                    while (tokens.Count > 0)
+                    while ( token != null && tokens.Count > 0)
                     {
-                        var lastToken = tokens.Pop();
-                        if (lastToken == null) lastToken = new Token();
+                        var lastToken = tokens.Pop() ?? new Token();
                         if (lastToken.Type == TokenType.Operator && lastToken.Text == "AND")
                         {
+                            token.ParentOperator = "AND";
                             _andExpr.Add(token);
                             addToStack = false;
                         }
                         else if (lastToken.Type == TokenType.Operator && lastToken.Text == "OR")
                         {
+                            token.ParentOperator = "OR";
                             _orExpr.Add(token);
                             addToStack = false;
                         }
@@ -119,22 +123,22 @@ namespace mAdcOW.SharePoint.KqlParser
                         }
                         else
                         {
-                            if(lastToken.Text.StartsWith("-"))
+                            if (lastToken.Text.StartsWith("-"))
                             {
                                 lastToken.Text = lastToken.Text.Trim('-');
-                                token.ParentOperator = "ALL";
+                                lastToken.ParentOperator = "NONE";
                                 _notExpr.Add(lastToken);
                             }
                             else
                             {
-                                token.ParentOperator = "ALL";
-                                _andExpr.Add(lastToken);                                
+                                lastToken.ParentOperator = "ALL";
+                                _andExpr.Add(lastToken);
                             }
                         }
                     }
                     if (addToStack)
                         tokens.Push(token);
-                }                
+                }
             }
             while (tokens.Count > 0)
             {
@@ -146,6 +150,7 @@ namespace mAdcOW.SharePoint.KqlParser
                 }
                 else
                 {
+                    lastToken.ParentOperator = "ALL";
                     _andExpr.Add(lastToken);
                 }
             }
@@ -175,7 +180,7 @@ namespace mAdcOW.SharePoint.KqlParser
                 //_orExpr.Add(value);
             }
             foreach (var value in groupProperties.Values.Where(property => property.Count > 1))
-            {                
+            {
                 Token multiProp = new Token();
                 multiProp.Text = string.Join(" OR ", value.Select(t => t.Text).ToArray());
                 multiProp.Type = TokenType.Group;

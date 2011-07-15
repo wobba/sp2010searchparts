@@ -15,6 +15,7 @@ namespace mAdcOW.SharePoint.KqlParser
             _synonymLookup["contoso"] = new List<string> { "microsoft" };
             _synonymLookup["microsoft"] = new List<string> { "contoso" };
             _synonymLookup["pepsi"] = new List<string> { "cola" };
+            _synonymLookup["coca cola"] = new List<string> { "pepsi max" };
         }
 
         public string GetFqlFromKql( string kql )
@@ -75,7 +76,7 @@ namespace mAdcOW.SharePoint.KqlParser
 
         internal static string GetFqlQueryForTerm(Token token)
         {
-            bool isUserClass = token.ParentOperator == "AND";
+            bool isUserClass = token.ParentOperator == "AND" || token.ParentOperator == "ALL";
             string term = token.Text;
             if (token.Type == TokenType.Phrase && term.Contains(' '))
             {
