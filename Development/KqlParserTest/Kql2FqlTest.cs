@@ -88,6 +88,27 @@ namespace KQLParserTest
             string query = "test test2";
             string result = _helper.GetFqlFromKql(query);
         }
+
+        [TestMethod]
+        public void Simple2()
+        {
+            string query = "test AND test2";
+            string result = _helper.GetFqlFromKql(query);
+        }
+
+        [TestMethod]
+        public void SimpleSynonym1()
+        {
+            string query = "test contoso";
+            string result = _helper.GetFqlFromKql(query, SynonymHandling.Include, 100);
+        }
+
+        [TestMethod]
+        public void PhraseSynonym1()
+        {
+            string query = "test \"coca cola\"";
+            string result = _helper.GetFqlFromKql(query, SynonymHandling.Include, 100);
+        }
         //("SharePoint Search" OR "Live Search") AND title:"Keyword Syntax" NOT (sug OR svelg)
         //string query = @"(""SharePoint Search"" OR ""Live Search"") AND title:""title title"" NOT (sug OR svelg) ANY(test test2) ""mikael svenson"" ";
         //string query = @"(""SharePoint Search"" OR ""Live Search"") title:""title title"" NOT (sug OR svelg) ANY(test test2) ""mikael svenson"" ";
