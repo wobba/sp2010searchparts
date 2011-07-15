@@ -2,17 +2,13 @@
 using System.Linq;
 using System.Text;
 
-namespace KQLParser
+namespace mAdcOW.SharePoint.KqlParser
 {
-    public enum Synonym
-    {
-        None, Include
-    }
     public class FqlHelper
     {
         private readonly Dictionary<string, List<string>> _synonymLookup = new Dictionary<string, List<string>>();
         private bool _synonymAdded;
-        private Synonym _synonym;
+        private SynonymHandling _synonymHandling;
 
         public FqlHelper()
         {
@@ -28,19 +24,19 @@ namespace KQLParser
             builder.Build();
             List<string> includes = new List<string>();
             List<string> excludes = new List<string>();
-            CreateTokenFql(builder, includes, excludes, Synonym.None);
+            CreateTokenFql(builder, includes, excludes, SynonymHandling.None);
             return Build(includes, excludes);
         }
 
-        public string GetFqlFromKql( string kql, Synonym synonym, int boostValue )
+        public string GetFqlFromKql( string kql, SynonymHandling synonymHandling, int boostValue )
         {
-            _synonym = synonym;
+            _synonymHandling = synonymHandling;
             const TokenType allowedTokenTypes = TokenType.Group | TokenType.Phrase | TokenType.Property | TokenType.Word | TokenType.Operator;
             TokenBuilder builder = new TokenBuilder(kql, allowedTokenTypes);
             builder.Build();
             List<string> includes = new List<string>();
             List<string> excludes = new List<string>();
-            CreateTokenFql(builder, includes, excludes, synonym);
+            CreateTokenFql(builder, includes, excludes, synonymHandling);
             string resultFql = Build(includes, excludes);
             if(_synonymAdded && boostValue > 0)
             {
@@ -51,7 +47,7 @@ namespace KQLParser
                 if(includes.Count > 1 ) sb.Append("and(");
                 includes.Clear();
                 excludes.Clear();
-                CreateTokenFql(builder, includes, excludes, Synonym.None);
+                CreateTokenFql(builder, includes, excludes, SynonymHandling.None);
                 sb.Append(Build(includes, new List<string>()).Replace("annotation_class=\"user\",", "") );
                 if(includes.Count > 1 ) sb.Append(")");
                 sb.AppendFormat(",boost={0})", boostValue); // close xrank
@@ -63,11 +59,11 @@ namespace KQLParser
         private string JoinTokens(List<Token> tokens, string operand)
         {
             if (tokens.Count == 0) return string.Empty;
-            if (tokens.Count == 1) return tokens[0].GetFql(_synonym);
+            if (tokens.Count == 1) return tokens[0].GetFql(_synonymHandling);
             var innerQueries = new List<string>();
             foreach (Token token in tokens)
             {
-                innerQueries.Add(token.GetFql(_synonym));
+                innerQueries.Add(token.GetFql(_synonymHandling));
             }
             var innerSb = new StringBuilder();
             innerSb.Append(operand);
@@ -117,7 +113,6 @@ namespace KQLParser
         internal string Build(List<string> includes, List<string> excludes)
         {
             var sb = new StringBuilder();
-            //if (_boostValue > 0 && _synonymAdded) sb.Append("xrank(");
             if (excludes.Count > 0) sb.Append("andnot(");
             if (includes.Count > 1) sb.Append("and(");
             sb.Append(string.Join(",", includes.ToArray()));
@@ -129,19 +124,10 @@ namespace KQLParser
                 sb.Append(string.Join(",", excludes.ToArray()));
                 sb.Append(")"); // close andnot
             }
-            //if (_boostValue > 0 && _synonymAdded)
-            //{
-            //    sb.Append(",");
-            //    if (_expansionsClean.Count > 1) sb.Append("and(");
-            //    string boostQuery = string.Join(",", _expansionsClean.ToArray()).Replace("annotation_class=\"user\",", "");
-            //    sb.Append(boostQuery);
-            //    if (_expansionsClean.Count > 1) sb.Append(")"); // close and
-            //    sb.AppendFormat(",boost={0})", _boostValue); // close xrank
-            //}
             return sb.ToString();
         }
 
-        internal void CreateTokenFql(TokenBuilder builder, List<string> includes, List<string> excludes, Synonym synonym)
+        internal void CreateTokenFql(TokenBuilder builder, List<string> includes, List<string> excludes, SynonymHandling synonymHandling)
         {
             string ors = JoinTokens(builder.OrExpr, "or");
 
@@ -149,8 +135,8 @@ namespace KQLParser
                 includes.Add(ors);
             foreach (Token token in builder.AndExpr)
             {
-                string fql = token.GetFql(synonym);
-                if (synonym == Synonym.Include && (token.Type == TokenType.Phrase || token.Type == TokenType.Word))
+                string fql = token.GetFql(synonymHandling);
+                if (synonymHandling == SynonymHandling.Include && (token.Type == TokenType.Phrase || token.Type == TokenType.Word))
                 {
                     fql = GetSynonymsFql(token.Text, fql);
                 }
@@ -158,7 +144,7 @@ namespace KQLParser
             }
             foreach (Token token in builder.NotExpr)
             {
-                excludes.Add(token.GetFql(Synonym.None));
+                excludes.Add(token.GetFql(SynonymHandling.None));
             }
         }
 

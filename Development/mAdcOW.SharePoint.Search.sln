@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mAdcOW.SharePoint.KqlParser", "KqlParser\mAdcOW.SharePoint.KqlParser.csproj", "{2E966EDA-E25E-490F-A9F1-251CEE96A2F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mAdcOW.SharePoint.SearchParts", "SearchParts\mAdcOW.SharePoint.SearchParts.csproj", "{245CBFF8-1BCD-4471-9868-AD6A162461D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E558E431-B4C5-42A7-A2F9-3C668853D61C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KQLParserTest", "KqlParserTest\KQLParserTest.csproj", "{EACC9932-54C1-43DC-8950-3F3A4D15D50E}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs03
+		SccProjectUniqueName0 = KqlParser\\mAdcOW.SharePoint.KqlParser.csproj
+		SccProjectName0 = KqlParser
+		SccLocalPath0 = KqlParser
+		SccLocalPath1 = .
+		SccProjectUniqueName2 = SearchParts\\mAdcOW.SharePoint.SearchParts.csproj
+		SccProjectName2 = SearchParts
+		SccLocalPath2 = SearchParts
+		SccProjectUniqueName3 = KqlParserTest\\KQLParserTest.csproj
+		SccProjectTopLevelParentUniqueName3 = mAdcOW.SharePoint.Search.sln
+		SccProjectName3 = KqlParserTest/KqlParserTest
+		SccLocalPath3 = KqlParserTest
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E966EDA-E25E-490F-A9F1-251CEE96A2F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E966EDA-E25E-490F-A9F1-251CEE96A2F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E966EDA-E25E-490F-A9F1-251CEE96A2F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{245CBFF8-1BCD-4471-9868-AD6A162461D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{245CBFF8-1BCD-4471-9868-AD6A162461D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{245CBFF8-1BCD-4471-9868-AD6A162461D2}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{245CBFF8-1BCD-4471-9868-AD6A162461D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{245CBFF8-1BCD-4471-9868-AD6A162461D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{245CBFF8-1BCD-4471-9868-AD6A162461D2}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{EACC9932-54C1-43DC-8950-3F3A4D15D50E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EACC9932-54C1-43DC-8950-3F3A4D15D50E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EACC9932-54C1-43DC-8950-3F3A4D15D50E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EACC9932-54C1-43DC-8950-3F3A4D15D50E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EACC9932-54C1-43DC-8950-3F3A4D15D50E} = {E558E431-B4C5-42A7-A2F9-3C668853D61C}
+	EndGlobalSection
+EndGlobal

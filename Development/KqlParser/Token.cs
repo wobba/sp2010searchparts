@@ -1,23 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace KQLParser
+namespace mAdcOW.SharePoint.KqlParser
 {
-    [Flags]
-    public enum TokenType
-    {
-        Operator = 1, Phrase = 2, Group = 4, Word = 8, Property = 16
-    }
-
     class Token
     {
         public string Text { get; set; }
         public TokenType Type { get; set; }
         public string ParentOperator { get; set; }
 
-        public string GetFql(Synonym synonym)
+        public string GetFql(SynonymHandling synonymHandling)
         {
             if (Type == TokenType.Phrase || Type == TokenType.Word || Type == TokenType.Property)
             {
@@ -43,7 +34,7 @@ namespace KQLParser
                 List<string> includes = new List<string>();
                 List<string> excludes = new List<string>();
                 FqlHelper helper = new FqlHelper();
-                helper.CreateTokenFql(builder, includes, excludes, synonym);
+                helper.CreateTokenFql(builder, includes, excludes, synonymHandling);
                 return helper.Build(includes, excludes);
             }
             return string.Empty;
