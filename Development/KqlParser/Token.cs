@@ -33,7 +33,7 @@ namespace mAdcOW.SharePoint.KqlParser
 
                 List<string> includes = new List<string>();
                 List<string> excludes = new List<string>();
-                FqlHelper helper = new FqlHelper(synonymLookup);
+                FqlHelper helper = new FqlHelper(synonymLookup, null);
                 helper.CreateTokenFql(builder, includes, excludes, synonymHandling);
                 return helper.Build(includes, excludes);
             }

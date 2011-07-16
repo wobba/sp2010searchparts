@@ -20,7 +20,7 @@ namespace KQLParserTest
             synonymLookup["microsoft"] = new List<string> { "contoso" };
             synonymLookup["pepsi"] = new List<string> { "cola" };
             synonymLookup["coca cola"] = new List<string> { "pepsi max" };
-            _helper = new FqlHelper(synonymLookup);
+            _helper = new FqlHelper(synonymLookup, null);
 
         }
 
