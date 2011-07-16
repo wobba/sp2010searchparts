@@ -73,6 +73,7 @@
     <Compile Include="CoreFqlResultsDataSourceView.cs" />
     <Compile Include="DynamicReflectionHelperForObject.cs" />
     <Compile Include="CoreResultsFQLWebPart\FqlCoreResults.cs" />
+    <Compile Include="FASTScopeReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FASTSynonymReader.cs" />
   </ItemGroup>

@@ -9,10 +9,12 @@ namespace mAdcOW.SharePoint.KqlParser
         private readonly Dictionary<string, List<string>> _synonymLookup;
         private bool _synonymAdded;
         private SynonymHandling _synonymHandling;
+        private string _scopeFilter;
 
-        public FqlHelper(Dictionary<string, List<string>> synonymLookup)
+        public FqlHelper(Dictionary<string, List<string>> synonymLookup, string scopeFilter)
         {
             _synonymLookup = synonymLookup;
+            _scopeFilter = scopeFilter;
         }
 
         public string GetFqlFromKql(string kql)
@@ -36,9 +38,9 @@ namespace mAdcOW.SharePoint.KqlParser
             List<string> excludes = new List<string>();
             CreateTokenFql(builder, includes, excludes, synonymHandling);
             string resultFql = Build(includes, excludes);
+            StringBuilder sb = new StringBuilder();
             if (_synonymAdded && boostValue > 0)
             {
-                StringBuilder sb = new StringBuilder();
                 sb.Append("xrank(");
                 sb.Append(resultFql);
                 sb.Append(",");
@@ -49,7 +51,11 @@ namespace mAdcOW.SharePoint.KqlParser
                 sb.Append(Build(includes, new List<string>()).Replace("annotation_class=\"user\",", ""));
                 if (includes.Count > 1) sb.Append(")");
                 sb.AppendFormat(",boost={0})", boostValue); // close xrank
-                return sb.ToString();
+                resultFql = sb.ToString();
+            }
+            if( !string.IsNullOrEmpty(_scopeFilter))
+            {
+                resultFql += " AND filter(" + _scopeFilter + ")";
             }
             return resultFql;
         }
