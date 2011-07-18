@@ -86,13 +86,18 @@ namespace mAdcOW.SharePoint.KqlParser
                         Token t = new Token
                                       {
                                           Text = NormalToken(_query.Substring(_pos), out skipChars).Trim()
-                                      };                        
-                        t.Type = t.Text.EndsWith(":") || t.Text.EndsWith("=") ? TokenType.Property : TokenType.Word;
+                                      };
+                        t.Type = HasPropertySeparator(t) ? TokenType.Property : TokenType.Word;
                         yield return t;
                         _pos += skipChars + 1;
                     }
                 }
             }
+        }
+
+        private bool HasPropertySeparator(Token t)
+        {
+            return t.Text.EndsWith(":") || t.Text.EndsWith("=") || t.Text.EndsWith("<") || t.Text.EndsWith(">");
         }
 
         private static string ParseGroup(string query, out int skipPos)
@@ -119,7 +124,9 @@ namespace mAdcOW.SharePoint.KqlParser
 
         private static string NormalToken(string query, out int skipPos)
         {
-            skipPos = query.IndexOfAny(new[] { ' ', ':', '=' }, 1);
+            skipPos = query.IndexOfAny(new[] { ' ', ':', '='}, 1);
+            if(skipPos < 0)
+                skipPos = query.IndexOfAny(new[] { '<', '>' }, 1);
             if (skipPos < 0) skipPos = query.Length - 1;
             return query.Substring(0, skipPos + 1);
         }

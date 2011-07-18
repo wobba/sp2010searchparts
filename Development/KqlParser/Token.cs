@@ -8,11 +8,12 @@ namespace mAdcOW.SharePoint.KqlParser
         public TokenType Type { get; set; }
         public string ParentOperator { get; set; }
 
-        public string GetFql(SynonymHandling synonymHandling, Dictionary<string, List<string>> synonymLookup)
+        public string GetFql(SynonymHandling synonymHandling, Dictionary<string, List<string>> synonymLookup, Dictionary<string,string> propertyTypeLookup)
         {
             if (Type == TokenType.Phrase || Type == TokenType.Word || Type == TokenType.Property)
             {
-                return FqlHelper.GetFqlQueryForTerm(this);
+                FqlHelper helper = new FqlHelper(synonymLookup,propertyTypeLookup,null);
+                return helper.GetFqlQueryForTerm(this);
             }
             else if (Type == TokenType.Group)
             {
@@ -33,7 +34,7 @@ namespace mAdcOW.SharePoint.KqlParser
 
                 List<string> includes = new List<string>();
                 List<string> excludes = new List<string>();
-                FqlHelper helper = new FqlHelper(synonymLookup, null);
+                FqlHelper helper = new FqlHelper(synonymLookup, propertyTypeLookup, null);
                 helper.CreateTokenFql(builder, includes, excludes, synonymHandling);
                 return helper.Build(includes, excludes);
             }
