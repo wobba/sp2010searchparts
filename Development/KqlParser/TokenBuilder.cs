@@ -159,14 +159,14 @@ namespace mAdcOW.SharePoint.KqlParser
         }
 
         /// <summary>
-        /// Equal properties should be considered an or, not and
+        /// Equal properties should be considered an or, unless specifically have AND between them
         /// </summary>
         private void GroupEqualPropertyKeys()
         {
             Dictionary<string, List<Token>> groupProperties = new Dictionary<string, List<Token>>();
             foreach (Token token in _andExpr.Where(t => t.Type == TokenType.Property))
             {
-                string propertyName = token.Text.Substring(0, token.Text.IndexOf((':')));
+                string propertyName = token.Text.Substring(0, token.Text.IndexOfAny(new [] {':', '=', '>', '<'}));
                 List<Token> properties;
                 if (!groupProperties.TryGetValue(propertyName, out properties))
                 {
@@ -174,20 +174,23 @@ namespace mAdcOW.SharePoint.KqlParser
                 }
                 properties.Add(token);
             }
-            foreach (var value in groupProperties.Values.Where(property => property.Count > 1).SelectMany(property => property))
+
+            foreach (var value in groupProperties.Values)
             {
-                _andExpr.Remove(value);
-                //_orExpr.Add(value);
-            }
-            foreach (var value in groupProperties.Values.Where(property => property.Count > 1))
-            {
+                if (value.Count <= 1) continue;
+                if (value.Any(token => token.ParentOperator == "AND")) continue;
+                foreach (var token in value)
+                {
+                    _andExpr.Remove(token);
+                }
+
                 Token multiProp = new Token();
-                multiProp.Text = string.Join(" OR ", value.Select(t => t.Text).ToArray());
+                string joinOperator = " OR ";
+                multiProp.Text = string.Join(joinOperator, value.Select(t => t.Text).ToArray());
                 multiProp.Type = TokenType.Group;
                 multiProp.ParentOperator = "AND";
                 _andExpr.Add(multiProp);
             }
-
         }
     }
 }
