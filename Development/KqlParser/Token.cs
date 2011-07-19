@@ -2,6 +2,15 @@
 
 namespace mAdcOW.SharePoint.KqlParser
 {
+    /// <summary>
+    /// Stores a kql token
+    ///
+    /// Author: Mikael Svenson - mAdcOW deZign    
+    /// E-mail: miksvenson@gmail.com
+    /// Twitter: @mikaelsvenson
+    /// 
+    /// This source code is released under the MIT license
+    /// </summary>
     class Token
     {
         public string Text { get; set; }

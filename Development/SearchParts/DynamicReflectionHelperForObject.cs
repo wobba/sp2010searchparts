@@ -4,10 +4,19 @@ using System.Reflection.Emit;
 
 namespace mAdcOW.SharePoint.Search
 {
+    /// <summary>
+    /// Helper class used for setting the core results webpart in fql mode
+    /// Used for building fql with the correct data types
+    ///
+    /// Author: Mikael Svenson - mAdcOW deZign    
+    /// E-mail: miksvenson@gmail.com
+    /// Twitter: @mikaelsvenson
+    /// 
+    /// This source code is released under the MIT license
+    /// </summary>
     public class DynamicReflectionHelperforObject<TV>
     {
         public delegate T GetPropertyFieldDelegate<T>(TV obj);
-
 
         public static GetPropertyFieldDelegate<TC> GetProperty<TC>(string memberName)
         {

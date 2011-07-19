@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="CoreFqlResultsDataSource.cs" />
     <Compile Include="CoreFqlResultsDataSourceView.cs" />
+    <Compile Include="CoreResultsFQLWebPart\QueryKind.cs" />
     <Compile Include="DynamicReflectionHelperForObject.cs" />
     <Compile Include="CoreResultsFQLWebPart\FqlCoreResults.cs" />
     <Compile Include="FASTManagedPropertyReader.cs" />

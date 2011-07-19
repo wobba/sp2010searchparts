@@ -8,6 +8,16 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace KQLParserTest
 {
+    /// <summary>
+    /// Test cases for conversion
+    ///
+    /// Author: Mikael Svenson - mAdcOW deZign    
+    /// E-mail: miksvenson@gmail.com
+    /// Twitter: @mikaelsvenson
+    /// 
+    /// This source code is released under the MIT license
+    /// </summary>
+
     [TestClass]
     public class Kql2FqlTest
     {

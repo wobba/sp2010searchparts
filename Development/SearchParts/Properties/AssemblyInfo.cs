@@ -9,7 +9,7 @@ using System.Security;
 [assembly: AssemblyTitle("mAdcOW.SharePoint.Search")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("mAdcOW deZign")]
+[assembly: AssemblyCompany("mAdcOW deZign - Mikael Svenson")]
 [assembly: AssemblyProduct("SharePoint Search Parts")]
 [assembly: AssemblyCopyright("Copyright © mAdcOW deZign 2011")]
 [assembly: AssemblyTrademark("")]

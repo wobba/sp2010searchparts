@@ -1,14 +1,19 @@
-﻿// Copyright - Mikael Svenson - mAdcOW deZign
-// Under MIT license
-// E-mail: miksvenson@gmail.com
-// Twitter: @mikaelsvenson
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace mAdcOW.SharePoint.KqlParser
 {
+    /// <summary>
+    /// Helper class to convert the kql tokens to fql
+    ///
+    /// Author: Mikael Svenson - mAdcOW deZign    
+    /// E-mail: miksvenson@gmail.com
+    /// Twitter: @mikaelsvenson
+    /// 
+    /// This source code is released under the MIT license
+    /// </summary>
     public class FqlHelper
     {
         private readonly Dictionary<string, List<string>> _synonymLookup;
@@ -145,8 +150,14 @@ namespace mAdcOW.SharePoint.KqlParser
                     {
                         DateTime dateTime = DateTime.Parse(propVal);
                         propVal = dateTime.ToString("yyyy-MM-ddTHH:mm:ss") + "z";
-                        if(split == "=")
-                            return string.Format("\"{0}\":range({1}(\"{2}\"),{1}(\"{3}\"),from=\"{4}\",to=\"{5}\")", internalPair[0], fqlType, dateTime.ToString("yyyy-MM-ddTHH:mm:ss") + "z", dateTime.AddDays(1).ToString("yyyy-MM-ddTHH:mm:ss") + "z", from, to);
+                        if (split == "=")
+                        {
+                            return string.Format("\"{0}\":range({1}(\"{2}\"),{1}(\"{3}\"),from=\"{4}\",to=\"{5}\")",
+                                                 internalPair[0], fqlType,
+                                                 dateTime.ToString("yyyy-MM-ddTHH:mm:ss") + "z",
+                                                 dateTime.AddDays(1).ToString("yyyy-MM-ddTHH:mm:ss") + "z", from, to);
+                        }
+                        propVal = AdjustQueryIntentionByMissingHourMinuteSecond(split, propVal, dateTime);
                     }                    
                     if (split == "=")
                         return string.Format("\"{0}\":{1}(\"{2}\")", internalPair[0], fqlType, propVal);
@@ -167,6 +178,24 @@ namespace mAdcOW.SharePoint.KqlParser
             if (isUserClass)
                 return string.Format("string(\"{0}\", annotation_class=\"user\", mode=\"simpleall\")", term);
             return string.Format("string(\"{0}\", mode=\"simpleall\")", term);
+        }
+
+        /// <summary>
+        /// If the user hasn't specified hours, minutes or seconds and using <= or >=,
+        /// then it is most likely that the user want to check for the whole day range
+        /// </summary>
+        /// <param name="split"></param>
+        /// <param name="propVal"></param>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        private string AdjustQueryIntentionByMissingHourMinuteSecond(string split, string propVal, DateTime dateTime)
+        {
+            if( split == "<=" || split == ">=" && propVal.Length < 12)
+            {
+                dateTime = dateTime.AddDays(1);
+                propVal = dateTime.ToString("yyyy-MM-ddTHH:mm:ss") + "z";
+            }
+            return propVal;
         }
 
         private static string GetFqlQueryMode(string s)
