@@ -15,7 +15,7 @@ namespace mAdcOW.SharePoint.Search
     /// 
     /// This source code is released under the MIT license
     /// 
-    /// The code is copied from http://neganov.blogspot.com/2011/01/extending-coreresultswebpart-to-handle.html
+    /// The code is based on code from http://neganov.blogspot.com/2011/01/extending-coreresultswebpart-to-handle.html
     /// </summary>
     internal class CoreFqlResultsDataSourceView : CoreResultsDatasourceView
     {
