@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="2df136e1-6490-4351-bce5-b455fcfca72f" solutionId="2df136e1-6490-4351-bce5-b455fcfca72f" resetWebServer="false" name="TrustWebPartTest" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="2df136e1-6490-4351-bce5-b455fcfca72f" solutionId="2df136e1-6490-4351-bce5-b455fcfca72f" resetWebServer="false" name="SharePoint Search Parts" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
   <assemblies>
     <projectOutputAssembly location="KQLParser.dll" deploymentTarget="GlobalAssemblyCache" projectPath="..\KqlParser\mAdcOW.SharePoint.KqlParser.csproj" />
   </assemblies>
