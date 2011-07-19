@@ -3,6 +3,15 @@ using System.Linq;
 
 namespace mAdcOW.SharePoint.KqlParser
 {
+    /// <summary>
+    /// Parses a kql query string into kql tokens
+    ///
+    /// Author: Mikael Svenson - mAdcOW deZign    
+    /// E-mail: miksvenson@gmail.com
+    /// Twitter: @mikaelsvenson
+    /// 
+    /// This source code is released under the MIT license
+    /// </summary>
     class TokenBuilder
     {
         private readonly List<Token> _andExpr = new List<Token>();

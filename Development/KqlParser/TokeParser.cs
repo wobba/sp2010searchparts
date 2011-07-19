@@ -3,6 +3,15 @@ using System.Collections.Generic;
 
 namespace mAdcOW.SharePoint.KqlParser
 {
+    /// <summary>
+    /// Enumerates the query string into tokens
+    ///
+    /// Author: Mikael Svenson - mAdcOW deZign    
+    /// E-mail: miksvenson@gmail.com
+    /// Twitter: @mikaelsvenson
+    /// 
+    /// This source code is released under the MIT license
+    /// </summary>
     internal class TokeParser : IEnumerable<Token>
     {
         private readonly string _query;

@@ -10,6 +10,16 @@ using Synonym = Microsoft.SharePoint.Search.Extended.Administration.Keywords.Syn
 
 namespace mAdcOW.SharePoint.Search
 {
+    /// <summary>
+    /// Read in all synonyms and store as a lookup table
+    /// Used for building fql with the correct data types
+    ///
+    /// Author: Mikael Svenson - mAdcOW deZign    
+    /// E-mail: miksvenson@gmail.com
+    /// Twitter: @mikaelsvenson
+    /// 
+    /// This source code is released under the MIT license
+    /// </summary>
     class FastSynonymReader
     {
         public static void PopulateSynonyms(Dictionary<string, List<string>> synonymLookup)
