@@ -207,6 +207,13 @@ namespace KQLParserTest
             string query = "write<=\"2009-10-15 23:59:59\"";
             string result = _helper.GetFqlFromKql(query, SynonymHandling.Include, 100);
         }
+
+        [TestMethod]
+        public void Phrase()
+        {
+            string query = "\"search\"";
+            string result = _helper.GetFqlFromKql(query, SynonymHandling.None, 0);
+        }
         
         //("SharePoint Search" OR "Live Search") AND title:"Keyword Syntax" NOT (sug OR svelg)
         //string query = @"(""SharePoint Search"" OR ""Live Search"") AND title:""title title"" NOT (sug OR svelg) ANY(test test2) ""mikael svenson"" ";

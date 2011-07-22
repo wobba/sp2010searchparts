@@ -93,7 +93,7 @@ namespace mAdcOW.SharePoint.KqlParser
         {
             bool isUserClass = token.ParentOperator == "AND" || token.ParentOperator == "ALL";
             string term = token.Text;
-            if (token.Type == TokenType.Phrase && term.Contains(' '))
+            if (token.Type == TokenType.Phrase)
             {
                 token.Text = token.Text.Trim(new[] { '"' });
                 if (isUserClass)
