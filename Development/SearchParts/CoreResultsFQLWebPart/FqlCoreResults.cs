@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Caching;
 using System.Web.UI.WebControls.WebParts;
@@ -26,20 +27,33 @@ namespace mAdcOW.SharePoint.Search
     [ToolboxItemAttribute(false)]
     public class FqlCoreResults : CoreResultsWebPart
     {
-        QueryManager _queryManager;
+        private static Regex _reNonCharacter = new Regex(@"\W", RegexOptions.Compiled);
+        private QueryManager _queryManager;
+        private string _query;
+        private Dictionary<string, List<string>> _synonymLookup;
+        private bool _enableFql = true;
+        private string _cacheKey;
+        private int _cacheMinutes = 60;
+        private int _boostValue = 500;
+        private SynonymHandling _synonymHandling = SynonymHandling.Include;
 
         [Personalizable(PersonalizationScope.Shared)]
         [WebBrowsable(true)]
         [Category("Advanced Query Options")]
         [WebDisplayName("Synonym handling")]
         [WebDescription("Choose to expand synonyms")]
-        public SynonymHandling SynonymHandling { get; set; }
+        public SynonymHandling SynonymHandling
+        {
+            get { return _synonymHandling; }
+            set { _synonymHandling = value; }
+        }
 
         [Personalizable(PersonalizationScope.Shared)]
         [WebBrowsable(true)]
         [Category("Advanced Query Options")]
         [WebDisplayName("Query Language")]
         [WebDescription("Kql or Fql")]
+        [DefaultValue(QueryKind.Kql)]
         public QueryKind QueryKind { get; set; }
 
         [Personalizable(PersonalizationScope.Shared)]
@@ -47,46 +61,82 @@ namespace mAdcOW.SharePoint.Search
         [Category("Advanced Query Options")]
         [WebDisplayName("Original Query Boost Value")]
         [WebDescription("Boost the original entered query")]
-        public int BoostValue { get; set; }
+        public int BoostValue
+        {
+            get { return _boostValue; }
+            set { _boostValue = value; }
+        }
 
         [Personalizable(PersonalizationScope.Shared)]
         [WebBrowsable(true)]
         [Category("Advanced Query Options")]
         [WebDisplayName("Cache time for synonyms and scopes")]
         [WebDescription("Cache the values for specified minutes. 0=no caching")]
-        public int CacheMinutes { get; set; }
+        public int CacheMinutes
+        {
+            get { return _cacheMinutes; }
+            set { _cacheMinutes = value; }
+        }
 
         protected override void ConfigureDataSourceProperties()
         {
-            this.FixedQuery = GetQuery();
+            if (_enableFql)
+            {
+                // We use the FixedQuery parameter to pass inn fql
+                this.FixedQuery = GetQuery();
+            }
             base.ConfigureDataSourceProperties();
         }
 
         protected override void CreateDataSource()
         {
-            this.DataSource = new CoreFqlResultsDataSource(this);
+            _query = HttpUtility.UrlDecode(HttpContext.Current.Request["k"]);
+            _cacheKey = SPContext.Current.Site.Url;
+            _synonymLookup = GetSynonymLookup(_cacheKey);
+            if (IsSingleWordNoSynonyms())
+            {
+                // We can pass the query thru directly with no modifications
+                // This will allow best bets to function
+                _enableFql = false;
+                this.DataSource = new CoreResultsDatasource(this);
+            }
+            else
+            {
+                this.DataSource = new CoreFqlResultsDataSource(this);
+            }
+        }
+
+        private bool IsSingleWordNoSynonyms()
+        {
+            return string.IsNullOrEmpty(_query) || _query == "#" || (!_reNonCharacter.IsMatch(_query) && !_synonymLookup.ContainsKey(_query.ToLower()));
         }
 
         private string GetQuery()
         {
-            string query = HttpUtility.UrlDecode(HttpContext.Current.Request["k"]);
-            if (string.IsNullOrEmpty(query))
+            if (string.IsNullOrEmpty(_query))
             {
                 return null;
             }
-            if (QueryKind == QueryKind.Fql) return query;
+            if (QueryKind == QueryKind.Fql && _enableFql) return _query;
+            if (QueryKind == QueryKind.Kql && _query.ToLower().StartsWith("fql:"))
+            {
+                _query = _query.Substring(4);
+                return _query;
+            }
 
-            string cacheKey = SPContext.Current.Site.Url;
-            Dictionary<string, List<string>> synonymLookup = GetSynonymLookup(cacheKey);
-            Dictionary<string, string> scopeLookup = GetScopeLookup(cacheKey);
-            Dictionary<string, string> managedPropertyTypeLookup = GetPropertyTypeLookup(cacheKey);
+            return ConvertKqlToFql();
+        }
 
+        private string ConvertKqlToFql()
+        {
+            Dictionary<string, string> scopeLookup = GetScopeLookup(_cacheKey);
+            Dictionary<string, string> managedPropertyTypeLookup = GetPropertyTypeLookup(_cacheKey);
 
             string scopeFilter = null;
             if (!string.IsNullOrEmpty(this.Scope)) scopeLookup.TryGetValue(this.Scope.ToLower(), out scopeFilter);
 
-            FqlHelper helper = new FqlHelper(synonymLookup, managedPropertyTypeLookup, scopeFilter);
-            var fql = helper.GetFqlFromKql(query, SynonymHandling, BoostValue);
+            FqlHelper helper = new FqlHelper(_synonymLookup, managedPropertyTypeLookup, scopeFilter);
+            var fql = helper.GetFqlFromKql(_query, SynonymHandling, BoostValue);
             return fql;
         }
 
@@ -112,7 +162,7 @@ namespace mAdcOW.SharePoint.Search
             if (CacheMinutes == 0 || HttpContext.Current.Cache["scopes" + uniqueKey] == null)
             {
                 scopeLookup = new Dictionary<string, string>();
-                FastScopeReader.PopulateScopes(scopeLookup);    
+                FastScopeReader.PopulateScopes(scopeLookup);
                 HttpContext.Current.Cache.Add("scopes" + uniqueKey, scopeLookup, null, DateTime.UtcNow.AddMinutes(5), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
             }
             else
@@ -129,7 +179,7 @@ namespace mAdcOW.SharePoint.Search
             {
                 synonymLookup = new Dictionary<string, List<string>>();
                 FastSynonymReader.PopulateSynonyms(synonymLookup);
-                HttpContext.Current.Cache.Add("synonyms" + uniqueKey, synonymLookup, null, DateTime.UtcNow.AddMinutes(5), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);                
+                HttpContext.Current.Cache.Add("synonyms" + uniqueKey, synonymLookup, null, DateTime.UtcNow.AddMinutes(5), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
             }
             else
             {
