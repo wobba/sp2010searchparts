@@ -98,6 +98,7 @@ namespace mAdcOW.SharePoint.Search
                 // We can pass the query thru directly with no modifications
                 // This will allow best bets to function
                 _enableFql = false;
+                this.FixedQuery = string.Empty;
                 this.DataSource = new CoreResultsDatasource(this);
             }
             else
