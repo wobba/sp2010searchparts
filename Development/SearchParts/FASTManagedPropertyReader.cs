@@ -25,19 +25,18 @@ namespace mAdcOW.SharePoint.Search
             SPSecurity.RunWithElevatedPrivileges(
                 delegate
                 {
-                    var ssaProxy =
-                        (SearchServiceApplicationProxy)
-                        SearchServiceApplicationProxy.GetProxy(SPServiceContext.Current);
+                    var ssaProxy = (SearchServiceApplicationProxy)SearchServiceApplicationProxy.GetProxy(SPServiceContext.Current);
                     if (ssaProxy.FASTAdminProxy != null)
                     {
                         var fastProxy = ssaProxy.FASTAdminProxy;
-
                         SchemaContext schemaContext = fastProxy.SchemaContext;
+
                         foreach (ManagedProperty property in
                             schemaContext.Schema.AllManagedProperties.Where(property => property.Queryable))
                         {
                             propertyLookup.Add(property.Name.ToLower(), GetFqlType(property.Type));
                         }
+
                     }
                 }
                 );
