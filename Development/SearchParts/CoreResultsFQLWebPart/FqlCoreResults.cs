@@ -35,6 +35,7 @@ namespace mAdcOW.SharePoint.Search
         private string _cacheKey;
         private int _cacheMinutes = 60;
         private int _boostValue = 500;
+        private string _duplicateTrimProperty = "DocumentSignature";
         private SynonymHandling _synonymHandling = SynonymHandling.Include;
 
         [Personalizable(PersonalizationScope.Shared)]
@@ -78,6 +79,18 @@ namespace mAdcOW.SharePoint.Search
             set { _cacheMinutes = value; }
         }
 
+        [Personalizable(PersonalizationScope.Shared)]
+        [WebBrowsable(true)]
+        [Category("Advanced Query Options")]
+        [WebDisplayName("Duplicate Trimming Property")]
+        [WebDescription("Trim duplicates on a custom managed property")]
+        public string DuplicateTrimProperty
+        {
+            get { return _duplicateTrimProperty; }
+            set { _duplicateTrimProperty = value; }
+        }
+
+
         protected override void ConfigureDataSourceProperties()
         {
             if (_enableFql)
@@ -99,12 +112,12 @@ namespace mAdcOW.SharePoint.Search
                 // This will allow best bets to function
                 _enableFql = false;
                 this.FixedQuery = string.Empty;
-                this.DataSource = new CoreResultsDatasource(this);
             }
             else
             {
-                this.DataSource = new CoreFqlResultsDataSource(this);
+                _enableFql = true;
             }
+            this.DataSource = new CoreFqlResultsDataSource(this, _enableFql, _duplicateTrimProperty);
         }
 
         private bool IsSingleWordNoSynonyms()

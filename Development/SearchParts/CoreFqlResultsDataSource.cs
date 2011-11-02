@@ -16,11 +16,15 @@ namespace mAdcOW.SharePoint.Search
     /// </summary>
     public class CoreFqlResultsDataSource : CoreResultsDatasource
     {
+        internal string DuplicateTrimProperty;
+        internal bool EnableFql;
         private const string CoreFqlResultsViewName = "CoreFqlResults";
 
-        public CoreFqlResultsDataSource(CoreResultsWebPart parentWebPart)
+        public CoreFqlResultsDataSource(CoreResultsWebPart parentWebPart, bool enableFql, string duplicateTrimProperty)
             : base(parentWebPart)
         {
+            EnableFql = enableFql;
+            DuplicateTrimProperty = duplicateTrimProperty;
             // Replace default view with a custom view.
             base.View = new CoreFqlResultsDataSourceView(this, CoreFqlResultsViewName);            
         }
