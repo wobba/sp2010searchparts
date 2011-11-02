@@ -23,12 +23,14 @@ namespace mAdcOW.SharePoint.Search
             _internalGetHelper =
                 DynamicReflectionHelperforObject<Location>.GetProperty<ILocationRuntime>("LocationRuntime");
 
+        private CoreFqlResultsDataSource _fqlDataSourceOwner;
+
         public CoreFqlResultsDataSourceView(SearchResultsBaseDatasource dataSourceOwner, string viewName)
             : base(dataSourceOwner, viewName)
         {
-            CoreFqlResultsDataSource fqlDataSourceOwner = base.DataSourceOwner as CoreFqlResultsDataSource;
+            _fqlDataSourceOwner = base.DataSourceOwner as CoreFqlResultsDataSource;
 
-            if (fqlDataSourceOwner == null)
+            if (_fqlDataSourceOwner == null)
             {
                 throw new ArgumentOutOfRangeException();
             }
@@ -54,7 +56,9 @@ namespace mAdcOW.SharePoint.Search
                 base.LocationList.Select(location => _internalGetHelper.Invoke(location)).OfType<FASTSearchRuntime>())
             {
                 // This is a FAST Search runtime. We can now enable FQL.
-                runtime.EnableFQL = true;
+                runtime.EnableFQL = _fqlDataSourceOwner.EnableFql;
+                if (!string.IsNullOrEmpty(_fqlDataSourceOwner.DuplicateTrimProperty))
+                    runtime.TrimDuplicatesOnProperty = _fqlDataSourceOwner.DuplicateTrimProperty;
                 break;
             }
         }
