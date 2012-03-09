@@ -8,19 +8,13 @@
     <data>
       <properties>
         <property name="Title" type="string">FQL Search Core Results</property>
-        <property name="Description" type="string">My WebPart</property>
+        <property name="Description" type="string">Search Core Results Replacement</property>
         <property name="ChromeType">None</property>
         <property name="AllowMinimize" type="bool">true</property>
         <property name="AllowClose" type="bool">true</property>
         <property name="Hidden" type="bool">false</property>
-        <property name="ScopeID" type="int">1</property>
         <property name="ShowActionLinks" type="bool">false</property>
-        <property name="DateView" type="bool">false</property>
-        <property name="RelevanceView" type="bool">false</property>
-        <property name="DisplayAlertMeLink" type="bool">false</property>
-        <property name="DisplayRSSLink" type="bool">false</property>
-        <property name="DisplayDiscoveredDefinition" type="bool">true</property>
-        <property name="UseLocationVisualization" type="bool">true</property>
+        <property name="ShowMessages" type="bool">true</property>
       </properties>
     </data>
   </webPart>
