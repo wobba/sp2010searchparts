@@ -58,6 +58,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files\Common Files\Microsoft Shared\Web Server Extensions\14\ISAPI\Microsoft.SharePoint.Search.Extended.Administration.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.SharePoint.Search.Extended.Administration.ResourceStorage, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files\Common Files\Microsoft Shared\Web Server Extensions\14\ISAPI\Microsoft.SharePoint.Search.Extended.Administration.ResourceStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SharePoint.Security, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files\Common Files\Microsoft Shared\Web Server Extensions\14\ISAPI\Microsoft.SharePoint.Security.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -74,8 +82,12 @@
     <Compile Include="CoreResultsFQLWebPart\QueryKind.cs" />
     <Compile Include="DynamicReflectionHelperForObject.cs" />
     <Compile Include="CoreResultsFQLWebPart\FqlCoreResults.cs" />
+    <Compile Include="FASTBestBetsReader.cs" />
     <Compile Include="FASTManagedPropertyReader.cs" />
     <Compile Include="FASTScopeReader.cs" />
+    <Compile Include="HighConfidencePartialMatchWebPart\HighConfidencePartialMatchWebPart.cs" />
+    <Compile Include="HighConfidencePartialMatchWebPart\HighConfidenceResultsDataSource.cs" />
+    <Compile Include="HighConfidencePartialMatchWebPart\HighConfidenceResultsDataSourceView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FASTSynonymReader.cs" />
   </ItemGroup>
@@ -83,9 +95,15 @@
     <None Include="Features\FQLEnabledFeature\FQLEnabledFeature.feature">
       <FeatureId>{d5d0ea93-293d-4dd6-862e-11b69fd4e6bf}</FeatureId>
     </None>
-    <None Include="CoreResultsFQLWebPart\FqlCoreResults.webpart" />
+    <None Include="CoreResultsFQLWebPart\FqlCoreResults.webpart">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="CoreResultsFQLWebPart\SharePointProjectItem.spdata">
       <SharePointProjectItemId>{98ed4e8b-e922-427d-b21a-d4724ce9af12}</SharePointProjectItemId>
+    </None>
+    <None Include="HighConfidencePartialMatchWebPart\HighConfidencePartialMatchWebPart.webpart" />
+    <None Include="HighConfidencePartialMatchWebPart\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{8d6c6262-2e93-42d7-837b-56e4b5b7c83b}</SharePointProjectItemId>
     </None>
     <None Include="Package\Package.package">
       <PackageId>{2df136e1-6490-4351-bce5-b455fcfca72f}</PackageId>
@@ -103,6 +121,7 @@
       <DependentUpon>FQLEnabledFeature.feature</DependentUpon>
     </Content>
     <Content Include="CoreResultsFQLWebPart\Elements.xml" />
+    <Content Include="HighConfidencePartialMatchWebPart\Elements.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KqlParser\mAdcOW.SharePoint.KqlParser.csproj">

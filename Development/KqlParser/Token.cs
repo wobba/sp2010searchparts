@@ -11,7 +11,7 @@ namespace mAdcOW.SharePoint.KqlParser
     /// 
     /// This source code is released under the MIT license
     /// </summary>
-    class Token
+    public class Token
     {
         public string Text { get; set; }
         public TokenType Type { get; set; }

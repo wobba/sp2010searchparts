@@ -12,7 +12,7 @@ namespace mAdcOW.SharePoint.KqlParser
     /// 
     /// This source code is released under the MIT license
     /// </summary>
-    class TokenBuilder
+    public class TokenBuilder
     {
         private readonly List<Token> _andExpr = new List<Token>();
         private readonly List<Token> _orExpr = new List<Token>();

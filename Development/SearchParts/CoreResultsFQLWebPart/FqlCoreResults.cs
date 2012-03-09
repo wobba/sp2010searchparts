@@ -6,7 +6,6 @@ using System.Web;
 using System.Web.Caching;
 using System.Web.UI.WebControls.WebParts;
 using mAdcOW.SharePoint.KqlParser;
-using Microsoft.Office.Server.Search.Query;
 using Microsoft.Office.Server.Search.WebControls;
 using Microsoft.SharePoint;
 
@@ -28,7 +27,6 @@ namespace mAdcOW.SharePoint.Search
     public class FqlCoreResults : CoreResultsWebPart
     {
         private static Regex _reNonCharacter = new Regex(@"\W", RegexOptions.Compiled);
-        private QueryManager _queryManager;
         private string _query;
         private Dictionary<string, List<string>> _synonymLookup;
         private bool _enableFql = true;
@@ -97,7 +95,7 @@ namespace mAdcOW.SharePoint.Search
             {
                 // We use the FixedQuery parameter to pass inn fql
                 this.FixedQuery = GetQuery();
-            }
+            }            
             base.ConfigureDataSourceProperties();
         }
 
