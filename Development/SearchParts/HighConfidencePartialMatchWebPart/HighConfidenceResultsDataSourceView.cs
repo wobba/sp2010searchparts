@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
@@ -20,7 +20,8 @@ namespace mAdcOW.SharePoint.Search
 
 
         // Methods
-        [SharePointPermission(SecurityAction.LinkDemand, ObjectModel = true), AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
+        [SharePointPermission(SecurityAction.LinkDemand, ObjectModel = true),
+         AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
         public HighConfidenceResultsDataSourceView(HighConfidenceResultsDataSource dataSourceOwner, string viewName)
             : base(dataSourceOwner, viewName)
         {
@@ -41,17 +42,19 @@ namespace mAdcOW.SharePoint.Search
             base.QueryManager = SharedQueryManager.GetInstance(parentWebpart.Page, parentWebpart.QueryID).QueryManager;
         }
 
-        [SharePointPermission(SecurityAction.LinkDemand, ObjectModel = true), AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
+        [SharePointPermission(SecurityAction.LinkDemand, ObjectModel = true),
+         AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
         public override XPathNavigator GetXPathNavigator(DataSourceSelectArguments selectArguments)
         {
-            if (this.ResultsXml == null)
+            if (ResultsXml == null)
             {
                 return null;
             }
-            return this.ResultsXml.CreateNavigator();
+            return ResultsXml.CreateNavigator();
         }
 
-        [SharePointPermission(SecurityAction.LinkDemand, ObjectModel = true), AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
+        [SharePointPermission(SecurityAction.LinkDemand, ObjectModel = true),
+         AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
         public override void SetPropertiesOnQdra()
         {
         }
@@ -59,27 +62,26 @@ namespace mAdcOW.SharePoint.Search
         // Properties
         public XmlDocument ResultsXml
         {
-            [SharePointPermission(SecurityAction.LinkDemand, ObjectModel = true), AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
+            [SharePointPermission(SecurityAction.LinkDemand, ObjectModel = true),
+             AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
             get
             {
-                if (this._resultsFetched)
+                if (_resultsFetched)
                 {
-                    return this._resultsXmlDoc;
+                    return _resultsXmlDoc;
                 }
-                this._resultsFetched = true;
+                _resultsFetched = true;
                 const TokenType allowedTokenTypes = TokenType.Phrase | TokenType.Word;
                 TokenBuilder builder = new TokenBuilder(base.QueryManager.UserQuery, allowedTokenTypes);
                 builder.Build();
-                List<string> words = new List<string>();                
-                words.AddRange( builder.AndExpr.Select( t => t.Text.Trim('"') .ToLower() ) );
+                List<string> words = new List<string>();
+                words.AddRange(builder.AndExpr.Select(t => t.Text.Trim('"').ToLower()));
                 words.AddRange(builder.OrExpr.Select(t => t.Text.Trim('"').ToLower()));
                 string bestBetXml = FastBestBetsReader.CreateBestBetXml(words);
-                this._resultsXmlDoc = new XmlDocument();
-                this._resultsXmlDoc.LoadXml(bestBetXml);
-                return this._resultsXmlDoc;
+                _resultsXmlDoc = new XmlDocument();
+                _resultsXmlDoc.LoadXml(bestBetXml);
+                return _resultsXmlDoc;
             }
         }
     }
-
-
 }

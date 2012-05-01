@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Permissions;
-using System.Text;
+﻿using System.Security.Permissions;
 using System.Web;
 using Microsoft.Office.Server.Search.WebControls;
 using Microsoft.SharePoint.Security;
@@ -22,7 +18,4 @@ namespace mAdcOW.SharePoint.Search
             base.View = new HighConfidenceResultsDataSourceView(this, HighConfidenceViewName);
         }
     }
-
- 
-
 }
