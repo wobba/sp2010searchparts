@@ -67,7 +67,7 @@ namespace mAdcOW.SharePoint.Search
         {
             return string.Format(
                 "<SpecialTermInformation><Keyword>{0}</Keyword><Description>{1}</Description></SpecialTermInformation>",
-                keyword.Term, SPHttpUtility.HtmlEncode(keyword.Definition));
+                SPHttpUtility.HtmlEncode(keyword.Term), SPHttpUtility.HtmlEncode(keyword.Definition));
         }
 
         private static string BuildBestBetXml(Keyword keyword, BestBet bestBet)
@@ -84,8 +84,8 @@ namespace mAdcOW.SharePoint.Search
 			<FS14Description/>
 			<keyword>KD[{4}]</keyword>
 		</Result>",
-                1, bestBet.Name, bestBet.Description,
-                bestBet.Uri.OriginalString, keyword.Term);
+                1, SPHttpUtility.HtmlEncode(bestBet.Name), SPHttpUtility.HtmlEncode(bestBet.Description),
+                bestBet.Uri.OriginalString, SPHttpUtility.HtmlEncode(keyword.Term));
         }
 
         private static List<string> GetPartialTermWords(Keyword keyword)
