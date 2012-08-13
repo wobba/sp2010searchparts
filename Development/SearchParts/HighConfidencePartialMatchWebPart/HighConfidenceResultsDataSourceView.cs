@@ -17,7 +17,7 @@ namespace mAdcOW.SharePoint.Search
         // Fields
         private bool _resultsFetched;
         private XmlDocument _resultsXmlDoc;
-
+        public bool ExactTermMatching { get; set; }
 
         // Methods
         [SharePointPermission(SecurityAction.LinkDemand, ObjectModel = true),
@@ -76,8 +76,10 @@ namespace mAdcOW.SharePoint.Search
                 builder.Build();
                 List<string> words = new List<string>();
                 words.AddRange(builder.AndExpr.Select(t => t.Text.Trim('"').ToLower()));
+                
+                words.Add(string.Join(" ", builder.AndExpr.Select(t => t.Text.Trim('"').ToLower()).ToArray()));
                 words.AddRange(builder.OrExpr.Select(t => t.Text.Trim('"').ToLower()));
-                string bestBetXml = FastBestBetsReader.CreateBestBetXml(words);
+                string bestBetXml = FastBestBetsReader.CreateBestBetXml(words, ExactTermMatching);
                 _resultsXmlDoc = new XmlDocument();
                 _resultsXmlDoc.LoadXml(bestBetXml);
                 return _resultsXmlDoc;
