@@ -13,7 +13,7 @@ namespace mAdcOW.SharePoint.Search
 {
     class FastBestBetsReader
     {
-        public static string CreateBestBetXml(List<string> queryWords)
+        public static string CreateBestBetXml(List<string> queryWords, bool exactMatchOnTerms)
         {
             List<string> bestBets = new List<string>();
             List<string> termDefs = new List<string>();
@@ -31,16 +31,20 @@ namespace mAdcOW.SharePoint.Search
 
                         DateTime currentDate = DateTime.Now;
 
+                        string fullQuery = string.Join(" ", queryWords.ToArray());
+
                         foreach (SearchSettingGroup searchSettingGroup in searchSettingGroupCollection)
                         {
                             foreach (Keyword keyword in searchSettingGroup.Keywords)
                             {
-                                foreach (string bestBetTerms in GetPartialTermWords(keyword))
+                                List<string> terms = exactMatchOnTerms ? GetFullTermAndSynonymWords(keyword) : GetPartialTermAndSynonymWords(keyword);
+
+                                foreach (string bestBetTerms in terms)
                                 {
-                                    if (!queryWords.Contains(bestBetTerms)) continue;
+                                    if (!queryWords.Contains(bestBetTerms) && !fullQuery.Contains(bestBetTerms)) continue;
 
                                     string termDef = GetTermDefXml(keyword);
-                                    if (!termDefs.Contains(termDef))
+                                    if (!string.IsNullOrEmpty(termDef) && !termDefs.Contains(termDef))
                                     {
                                         termDefs.Add(termDef);
                                     }
@@ -65,6 +69,7 @@ namespace mAdcOW.SharePoint.Search
 
         private static string GetTermDefXml(Keyword keyword)
         {
+            if (string.IsNullOrEmpty(keyword.Term) || string.IsNullOrEmpty(keyword.Definition)) return string.Empty;
             return string.Format(
                 "<SpecialTermInformation><Keyword>{0}</Keyword><Description>{1}</Description></SpecialTermInformation>",
                 SPHttpUtility.HtmlEncode(keyword.Term), SPHttpUtility.HtmlEncode(keyword.Definition));
@@ -88,16 +93,28 @@ namespace mAdcOW.SharePoint.Search
                 bestBet.Uri.OriginalString, SPHttpUtility.HtmlEncode(keyword.Term));
         }
 
-        private static List<string> GetPartialTermWords(Keyword keyword)
-        {            
-            List<string> individualTerms = new List<string>();
-            string term = keyword.Term;
-            AddSingleWordTerms(individualTerms, term);
+        private static List<string> GetFullTermAndSynonymWords(Keyword keyword)
+        {
+            List<string> terms = new List<string>(10);
+            if (!string.IsNullOrEmpty(keyword.Term)) terms.Add(keyword.Term.ToLower());
             DateTime currentDate = DateTime.Now;
             foreach (Synonym synonym in keyword.Synonyms)
             {
                 if (synonym.StartDate < currentDate || synonym.EndDate > currentDate) continue;
-                AddSingleWordTerms(individualTerms, synonym.Term);
+                if (!string.IsNullOrEmpty(synonym.Term)) terms.Add(synonym.Term.ToLower());
+            }
+            return terms;
+        }
+
+        private static List<string> GetPartialTermAndSynonymWords(Keyword keyword)
+        {            
+            List<string> individualTerms = new List<string>(10);
+            if (!string.IsNullOrEmpty(keyword.Term)) AddSingleWordTerms(individualTerms, keyword.Term);
+            DateTime currentDate = DateTime.Now;
+            foreach (Synonym synonym in keyword.Synonyms)
+            {
+                if (synonym.StartDate < currentDate || synonym.EndDate > currentDate) continue;
+                if( !string.IsNullOrEmpty(synonym.Term)) AddSingleWordTerms(individualTerms, synonym.Term);
             }
             return individualTerms;
         }

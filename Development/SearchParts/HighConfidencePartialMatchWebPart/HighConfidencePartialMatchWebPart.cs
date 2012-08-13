@@ -39,6 +39,13 @@ namespace mAdcOW.SharePoint.Search
         private bool _isSrhdcError;
         private QueryManager _qdra;
 
+        [Personalizable(PersonalizationScope.Shared)]
+        [WebBrowsable(true)]
+        [Category("Advanced Options")]
+        [WebDisplayName("Exact Term Matching")]
+        [WebDescription("Don't partial match terms or synonyms")]
+        public bool ExactTermMatching { get; set; }
+
         // Methods
         private void AssignOOBXsl()
         {
@@ -87,9 +94,10 @@ namespace mAdcOW.SharePoint.Search
         {
             base.EnsureWebpartReady();
 
-            //TODO: build XML with best bets here
             HighConfidenceResultsDataSource dataSource = this.DataSource as HighConfidenceResultsDataSource;
-            return (dataSource.GetView() as HighConfidenceResultsDataSourceView).GetXPathNavigator(null);
+            var resultsDataSourceView = dataSource.GetView() as HighConfidenceResultsDataSourceView;
+            resultsDataSourceView.ExactTermMatching = ExactTermMatching;
+            return resultsDataSourceView.GetXPathNavigator(null);
         }
 
         protected override void ModifyXsltArgumentList(ArgumentClassWrapper argList)
