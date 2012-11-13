@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="bbd9754d-face-4208-b39a-f22820d57e8a" solutionId="bbd9754d-face-4208-b39a-f22820d57e8a" resetWebServer="false" sharePointProductVersion="15.0" name="SearchExtension" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="7df2b515-816e-4657-9e46-56f69624a774" />
+  </features>
+</package>
