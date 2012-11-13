@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<webParts>
+  <webPart xmlns="http://schemas.microsoft.com/WebPart/v3">
+    <metaData>
+      <type name="SearchExtension.CustomSearchWebPart.CustomSearchWebPart, $SharePoint.Project.AssemblyFullName$" />
+      <importErrorMessage>$Resources:core,ImportErrorMessage;</importErrorMessage>
+    </metaData>
+    <data>
+      <properties>
+        <property name="Title" type="string">#SPC191 - Really Simple Hidden Social Enabler Web Part</property>
+        <property name="Description" type="string">Put social following as variables to use in Query Rules</property>
+      </properties>
+    </data>
+  </webPart>
+</webParts>
