@@ -9,9 +9,9 @@ using System.Security;
 [assembly: AssemblyTitle("mAdcOW.SharePoint.WacProxy")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("mAdcOW.SharePoint.WacProxy")]
-[assembly: AssemblyCopyright("Copyright ©  2013")]
+[assembly: AssemblyCompany("mAdcOW deZign - Mikael Svenson")]
+[assembly: AssemblyProduct("SharePoint Search Parts")]
+[assembly: AssemblyCopyright("Copyright © mAdcOW deZign 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
