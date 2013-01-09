@@ -9,9 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{E558E431
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KQLParserTest", "KqlParserTest\KQLParserTest.csproj", "{EACC9932-54C1-43DC-8950-3F3A4D15D50E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mAdcOW.SharePoint.WacProxy", "mAdcOW.SharePoint.WacProxy\mAdcOW.SharePoint.WacProxy.csproj", "{475EC596-ADFD-477F-8337-2D86B0DF4EA8}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://tfs.codeplex.com/tfs/tfs03
 		SccLocalPath0 = .
@@ -25,6 +27,9 @@ Global
 		SccProjectTopLevelParentUniqueName3 = mAdcOW.SharePoint.Search.sln
 		SccProjectName3 = KqlParserTest
 		SccLocalPath3 = KqlParserTest
+		SccProjectUniqueName4 = mAdcOW.SharePoint.WacProxy\\mAdcOW.SharePoint.WacProxy.csproj
+		SccProjectName4 = mAdcOW.SharePoint.WacProxy
+		SccLocalPath4 = mAdcOW.SharePoint.WacProxy
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +50,12 @@ Global
 		{EACC9932-54C1-43DC-8950-3F3A4D15D50E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EACC9932-54C1-43DC-8950-3F3A4D15D50E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EACC9932-54C1-43DC-8950-3F3A4D15D50E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{475EC596-ADFD-477F-8337-2D86B0DF4EA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{475EC596-ADFD-477F-8337-2D86B0DF4EA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{475EC596-ADFD-477F-8337-2D86B0DF4EA8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{475EC596-ADFD-477F-8337-2D86B0DF4EA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{475EC596-ADFD-477F-8337-2D86B0DF4EA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{475EC596-ADFD-477F-8337-2D86B0DF4EA8}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

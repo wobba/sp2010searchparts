@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="84928563-ebc9-4903-97a3-26e6656618a0" solutionId="84928563-ebc9-4903-97a3-26e6656618a0" resetWebServer="false" name="mAdcOW.SharePoint.WacProxy" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <projectItems>
+    <projectItemReference itemId="5e2a1ebf-6846-428c-89e8-d5920b2a540d" />
+  </projectItems>
+</package>
