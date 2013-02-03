@@ -1,6 +1,7 @@
 ﻿ExecuteOrDelayUntilScriptLoaded(Override, 'ajaxtoolkit.js');
 function Override() {
     AjaxControlToolkit.AutoCompleteBehavior.prototype._getSuggestion = function() {
+        var rootCall = this;
         var cctx = Srch.ScriptApplicationManager.get_clientRuntimeContext();
         try {
             var text = this._currentPrefix;
@@ -29,7 +30,7 @@ function Override() {
                 jQuery.ajax({
                     url: '_vti_bin/SearchSuggestions.ashx',
                     data: sendInfo,
-                    async: false,
+                    async: true,
                     dataType: "json",
                     success: function(data) {
                         $.each(data.Queries, function() {
@@ -38,7 +39,6 @@ function Override() {
                             suggestion.set_isPersonal(this.IsPersonal);
                             queryArr.push(suggestion);
                         });
-                        var suggestion = new Microsoft.SharePoint.Client.Search.Query.PersonalResultSuggestion();
                         $.each(data.PersonalResults, function() {
                             var personal = new Microsoft.SharePoint.Client.Search.Query.PersonalResultSuggestion();
                             personal.set_highlightedTitle(this.HighlightedTitle);
@@ -49,18 +49,19 @@ function Override() {
                         });
 
                         peopleArr = data.PeopleNames;
+                        
+                        var newResult = new Microsoft.SharePoint.Client.Search.Query.QuerySuggestionResults();
+                        newResult.set_queries(queryArr);
+                        newResult.set_peopleNames(peopleArr);
+                        newResult.set_personalResults(personalArr);
+
+                        rootCall._update(text, newResult, true);
                     },
                     error: function() {
                         //response( [] );
                     }
                 });
 
-                var newResult = new Microsoft.SharePoint.Client.Search.Query.QuerySuggestionResults();
-                newResult.set_queries(queryArr);
-                newResult.set_peopleNames(peopleArr);
-                newResult.set_personalResults(personalArr)
-
-                this._update(text, newResult, true);
             } catch(ex) {
                 Srch.U.trace(null, "AutoCompleteBehavior._update", ex.toString());
             }
