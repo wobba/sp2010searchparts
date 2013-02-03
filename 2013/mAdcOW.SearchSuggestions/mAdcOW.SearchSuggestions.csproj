@@ -65,6 +65,9 @@
     <Reference Include="Microsoft.SharePoint" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Features\mAdcOW Search Master Page\mAdcOW Search Master Page.feature">
+      <FeatureId>{e319b63b-db5e-41c1-9cf2-9dc2c719a1ee}</FeatureId>
+    </None>
     <None Include="ISAPI\SearchSuggestions.ashx" />
     <Compile Include="ISAPI\SearchSuggestions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +77,13 @@
       <SharePointProjectItemId>{ed78cd58-40bc-4645-a5d3-0d0ca08b45b4}</SharePointProjectItemId>
     </None>
     <None Include="key.snk" />
+    <None Include="MasterPage\mAdcOW-search.master" />
+    <None Include="Layouts\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{8fb0ccbf-5439-4b78-bcf5-f912e78db844}</SharePointProjectItemId>
+    </None>
+    <None Include="MasterPage\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{22b8a4ff-5089-4cc3-9e0d-d6044f922b55}</SharePointProjectItemId>
+    </None>
     <None Include="Package\Package.package">
       <PackageId>{b30f000d-10af-47ce-a0e6-0298f6abaddc}</PackageId>
     </None>
@@ -81,8 +91,14 @@
       <DependentUpon>Package.package</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Features\" />
+    <Content Include="Features\mAdcOW Search Master Page\mAdcOW Search Master Page.Template.xml">
+      <DependentUpon>mAdcOW Search Master Page.feature</DependentUpon>
+    </Content>
+    <Content Include="Layouts\mAdcOW.SearchSuggestions\js\jquery-1.9.0.min.js" />
+    <Content Include="Layouts\mAdcOW.SearchSuggestions\js\suggestions.js" />
+    <Content Include="MasterPage\Elements.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
