@@ -1,5 +1,4 @@
-﻿ExecuteOrDelayUntilScriptLoaded(Override, 'ajaxtoolkit.js');
-function Override() {
+﻿function Override() {
     AjaxControlToolkit.AutoCompleteBehavior.prototype._getSuggestion = function() {
         var rootCall = this;
         var cctx = Srch.ScriptApplicationManager.get_clientRuntimeContext();
@@ -73,3 +72,4 @@ function Override() {
         $common.updateFormToRefreshATDeviceBuffer();
     };
 }
+ExecuteOrDelayUntilScriptLoaded(Override, 'ajaxtoolkit.js');
