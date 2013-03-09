@@ -46,46 +46,72 @@ namespace mAdcOW.SearchSuggestions
             string query = context.Request.QueryString["query"];
             string language = context.Request.QueryString["language"];
             string sourceId = context.Request.QueryString["sourceId"];
-            int numberOfQuerySuggestions = int.Parse(context.Request.QueryString["numberOfQuerySuggestions"]);
-            int numberOfResultSuggestions = int.Parse(context.Request.QueryString["numberOfResultSuggestions"]);
-            bool preQuerySuggestions = bool.Parse(context.Request.QueryString["preQuerySuggestions"]);
-            bool hitHighlighting = bool.Parse(context.Request.QueryString["hitHighlighting"]);
-            bool showPeopleNameSuggestions = bool.Parse(context.Request.QueryString["showPeopleNameSuggestions"]);
-            bool capitalizeFirstLetters = bool.Parse(context.Request.QueryString["capitalizeFirstLetters"]);
-            bool prefixMatchAllTerms = bool.Parse(context.Request.QueryString["prefixMatchAllTerms"]);
+            int numberOfQuerySuggestions;
+            int.TryParse(context.Request.QueryString["numberOfQuerySuggestions"], out numberOfQuerySuggestions);
+            int numberOfResultSuggestions;
+            int.TryParse(context.Request.QueryString["numberOfResultSuggestions"], out numberOfResultSuggestions);
+            bool preQuerySuggestions;
+            bool.TryParse(context.Request.QueryString["preQuerySuggestions"], out preQuerySuggestions);
+            bool hitHighlighting;
+            bool.TryParse(context.Request.QueryString["hitHighlighting"], out hitHighlighting);
+            bool showPeopleNameSuggestions;
+            bool.TryParse(context.Request.QueryString["showPeopleNameSuggestions"], out showPeopleNameSuggestions);
+            bool capitalizeFirstLetters;
+            bool.TryParse(context.Request.QueryString["capitalizeFirstLetters"], out capitalizeFirstLetters);
+            bool prefixMatchAllTerms;
+            bool.TryParse(context.Request.QueryString["prefixMatchAllTerms"], out prefixMatchAllTerms);
 
             var uri = new Uri(context.Request.Url, relativeUri);
 
             using (var site = new SPSite(uri.AbsoluteUri))
             {
                 ISearchServiceApplication ssaProxy = SearchServiceApplicationProxy.GetProxy(SPServiceContext.GetContext(site));
-
-                SPWeb web = site.OpenWeb(relativeUri);
-
-                // Make sure SPContect.Current works from ajax
-                if (SPContext.Current == null) HttpContext.Current.Items["HttpHandlerSPWeb"] = web;
-
-                var qp = GetQueryProperties(query, showPeopleNameSuggestions, sourceId, language);
-
-                if (IsUserAnonymous)
+                
+                if(string.IsNullOrWhiteSpace(relativeUri))
                 {
-                    numberOfResultSuggestions = 0;
-                }
-                QuerySuggestionResults results = ssaProxy.GetQuerySuggestionsWithResults(qp, numberOfQuerySuggestions,
-                                                                                         numberOfResultSuggestions, preQuerySuggestions,
-                                                                                         hitHighlighting, capitalizeFirstLetters,
-                                                                                         prefixMatchAllTerms);
-
-                bool trimSuggestions;
-                bool.TryParse(web.GetProperty("mAdcOWQuerySuggestions_TrimSuggestions") + "", out trimSuggestions);
-                if (trimSuggestions)
-                {
-                    results.Queries = SecurityTrimSearchSuggestions(results.Queries, web, qp.SourceId, qp.Culture);
+                    relativeUri = "/";
                 }
 
-                var serializer = new JavaScriptSerializer();
-                context.Response.ContentType = "application/json";
-                context.Response.Write(serializer.Serialize(results));
+                using (SPWeb web = site.OpenWeb(relativeUri))
+                {
+                    if (!string.IsNullOrWhiteSpace(context.Request.QueryString["trimsuggestions"]))
+                    {
+                        bool trim;
+                        bool.TryParse(context.Request.QueryString["trimsuggestions"], out trim);
+
+                        web.SetProperty("mAdcOWQuerySuggestions_TrimSuggestions", trim);
+                        context.Response.Write("Security trimming og search suggestions: " + trim);
+                        return;
+                    }
+
+                    // Make sure SPContect.Current works from ajax
+                    if (SPContext.Current == null) HttpContext.Current.Items["HttpHandlerSPWeb"] = web;
+
+                    var qp = GetQueryProperties(query, showPeopleNameSuggestions, sourceId, language);
+
+                    if (IsUserAnonymous)
+                    {
+                        numberOfResultSuggestions = 0;
+                    }
+                    QuerySuggestionResults results = ssaProxy.GetQuerySuggestionsWithResults(qp,
+                                                                                             numberOfQuerySuggestions,
+                                                                                             numberOfResultSuggestions,
+                                                                                             preQuerySuggestions,
+                                                                                             hitHighlighting,
+                                                                                             capitalizeFirstLetters,
+                                                                                             prefixMatchAllTerms);
+
+                    bool trimSuggestions;
+                    bool.TryParse(web.GetProperty("mAdcOWQuerySuggestions_TrimSuggestions") + "", out trimSuggestions);
+                    if (trimSuggestions)
+                    {
+                        results.Queries = SecurityTrimSearchSuggestions(results.Queries, web, qp.SourceId, qp.Culture);
+                    }
+
+                    var serializer = new JavaScriptSerializer();
+                    context.Response.ContentType = "application/json";
+                    context.Response.Write(serializer.Serialize(results));
+                }
             }
         }
 
