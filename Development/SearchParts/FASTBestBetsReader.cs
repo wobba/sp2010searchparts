@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Microsoft.Office.Server.Search.Administration;
 using Microsoft.SharePoint;
 using Microsoft.SharePoint.Search.Extended.Administration;
@@ -13,6 +14,7 @@ namespace mAdcOW.SharePoint.Search
 {
     class FastBestBetsReader
     {
+        static readonly Regex _reNonChar = new Regex(@"\W", RegexOptions.Compiled);
         public static string CreateBestBetXml(List<string> queryWords, bool exactMatchOnTerms)
         {
             List<string> bestBets = new List<string>();
@@ -41,7 +43,15 @@ namespace mAdcOW.SharePoint.Search
 
                                 foreach (string bestBetTerms in terms)
                                 {
-                                    if (!queryWords.Contains(bestBetTerms) && !fullQuery.Contains(bestBetTerms)) continue;
+                                    //TODO: fullquery - check any combination with exact match on the best bet
+
+                                    if( !_reNonChar.IsMatch(bestBetTerms)) //a-z only
+                                    {
+                                        Regex reBoundaryMatch = new Regex(@"\b" + bestBetTerms + @"\b");
+                                        if( !reBoundaryMatch.IsMatch(fullQuery)) continue;
+                                    }
+
+                                    if (!queryWords.Contains(bestBetTerms)) continue;
 
                                     string termDef = GetTermDefXml(keyword);
                                     if (!string.IsNullOrEmpty(termDef) && !termDefs.Contains(termDef))
