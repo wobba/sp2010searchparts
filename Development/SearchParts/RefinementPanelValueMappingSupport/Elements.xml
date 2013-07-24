@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/" >
+  <Module Name="RefinementPanelValueMappingSupport" List="113" Url="_catalogs/wp">
+    <File Path="RefinementPanelValueMappingSupport\RefinementPanelValueMappingSupport.webpart" Url="RefinementPanelValueMappingSupport.webpart" Type="GhostableInLibrary">
+      <Property Name="Group" Value="Search" />
+    </File>
+  </Module>
+</Elements>

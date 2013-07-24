@@ -75,9 +75,12 @@ namespace mAdcOW.SharePoint.Search
                 TokenBuilder builder = new TokenBuilder(base.QueryManager.UserQuery, allowedTokenTypes);
                 builder.Build();
                 List<string> words = new List<string>();
-                words.AddRange(builder.AndExpr.Select(t => t.Text.Trim('"').ToLower()));
-                
-                words.Add(string.Join(" ", builder.AndExpr.Select(t => t.Text.Trim('"').ToLower()).ToArray()));
+                words.AddRange(builder.AndExpr.Select(t => t.Text.Trim('"').ToLower())); //original term
+                if (builder.AndExpr.Count > 1)
+                {
+                    // add multi word terms
+                    words.Add(string.Join(" ", builder.AndExpr.Select(t => t.Text.Trim('"').ToLower()).ToArray()));
+                }
                 words.AddRange(builder.OrExpr.Select(t => t.Text.Trim('"').ToLower()));
                 string bestBetXml = FastBestBetsReader.CreateBestBetXml(words, ExactTermMatching);
                 _resultsXmlDoc = new XmlDocument();

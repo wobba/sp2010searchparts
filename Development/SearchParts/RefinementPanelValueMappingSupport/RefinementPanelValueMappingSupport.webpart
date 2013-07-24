@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<webParts>
+  <webPart xmlns="http://schemas.microsoft.com/WebPart/v3">
+    <metaData>
+      <type name="mAdcOW.SharePoint.Search.RefinementPanelValueMappingSupport.RefinementPanelValueMappingSupport, $SharePoint.Project.AssemblyFullName$" />
+      <importErrorMessage>$Resources:core,ImportErrorMessage;</importErrorMessage>
+    </metaData>
+    <data>
+      <properties>
+        <property name="Title" type="string">RefinementPanel with Value Mapping Support</property>
+        <property name="Description" type="string">Support for valuemapping for FS4SP</property>
+        <property name="ChromeType">None</property>
+        <property name="AllowMinimize" type="bool">true</property>
+        <property name="AllowClose" type="bool">true</property>
+        <property name="Hidden" type="bool">false</property>
+        <property name="ScopeID" type="int">1</property>
+        <property name="ShowActionLinks" type="bool">false</property>
+        <property name="DateView" type="bool">false</property>
+        <property name="RelevanceView" type="bool">false</property>
+        <property name="DisplayAlertMeLink" type="bool">false</property>
+        <property name="DisplayRSSLink" type="bool">false</property>
+        <property name="DisplayDiscoveredDefinition" type="bool">true</property>
+        <property name="UseLocationVisualization" type="bool">true</property>
+      </properties>
+    </data>
+  </webPart>
+</webParts>
